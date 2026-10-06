@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Administradora de Activos y Remates Bancarios</title>
+        <!-- Google Fonts -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet" />
+        <!-- FontAwesome para Íconos -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+        <style>
+            /* RESET Y ESTILOS BASE */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: "Montserrat", sans-serif;
+            }
+
+            /* Botón Hamburguesa (oculto en computadoras) */
+            .menu-toggle {
+                display: none;
+                background: none;
+                border: none;
+                color: #ffffff;
+        font-size: 24px;
+                cursor: pointer;
+                padding: 5px;
+            }
+
+            /* Estilos para Celulares (pantallas menores a 768px) */
+            @media (max-width: 768px) {
+                .menu-toggle {
+                    display: block; /* Muestra el botón de hamburguesa */
+            }
+
+            .nav {
+                display: none; /* Oculta el menú por defecto */
+                position: absolute;
+                top: 100%;
+                left: 0;
+            width: 100%;
+                background-color: #0b1e36; /* Color azul oscuro de Adamantine */
+                box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+                padding: 20px 0;
+            }
+
+            /* Clase activa que se activa al dar clic */
+                .nav.active {
+                    display: block !important;
+                }
+
+            .nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .nav ul li {
+                margin-left: 0;
+                width: 100%;
+                text-align: center;
+            }
+
+            .nav a {
+                display: block;
+                padding: 10px;
+                font-size: 16px;
+            }
+}
+            html {
+                scroll-behavior: smooth;
+            }
+
+            body {
+                color: #2b2b2b;
+                background-color: #fcfcfc;
+            }
+
+            .container {
+                width: 90%;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .text-center {
+                text-align: center;
+            }
+
+            /* HEADER & NAVBAR */
+            .header {
+                background-color: #0b1e36;
+                position: fixed;
+                width: 100%;
+                top: 0;
+                left: 0;
+                z-index: 1000;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            }
+
+            .nav-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 18px 0;
+            }
+
+            .logo h2 {
+                color: #ffffff;
+                font-size: 22px;
+                letter-spacing: 2px;
+                font-weight: 700;
+            }
+
+            .nav ul {
+                display: flex;
+                list-style: none;
+                align-items: center;
+            }
+
+            .nav ul li {
+                margin-left: 25px;
+            }
+
+            .nav a {
+                text-decoration: none;
+                color: #e2e8f0;
+                font-size: 14px;
+                font-weight: 500;
+                transition: 0.3s;
+            }
+
+            .nav a:hover {
+                color: #c95c00;
+            }
+
+            .btn-nav {
+                background: #c95c00;
+                color: #fff !important;
+                padding: 10px 20px;
+                border-radius: 4px;
+                font-weight: 600;
+            }
+
+            /* IMAGEN HERO SECTION */
+            .hero {
+                background: url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80")
+                    center/cover no-repeat;
+                min-height: 55vh;
+                display: flex;
+                align-items: center;
+                position: relative;
+                margin-top: 30px;
+                padding: 30px 0;
+            }
+
+            .hero-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, rgba(11, 30, 54, 0.92) 0%, rgba(11, 30, 54, 0.7) 100%);
+            }
+
+            .hero-content {
+                position: relative;
+                color: #fff;
+                max-width: 750px;
+                width: 100;
+            }
+
+            .hero-tagline {
+                color: #c95c00;
+                font-size: 13px;
+                font-weight: 700;
+                letter-spacing: 2px;
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            .hero-content h1 {
+                font-size: 38px;
+                line-height: 1.25;
+                margin-bottom: 20px;
+                font-weight: 700;
+            }
+
+            .hero-content p {
+                font-size: 16px;
+                line-height: 1.6;
+                margin-bottom: 30px;
+                color: #cbd5e1;
+            }
+
+            /* BOTONES */
+            .btn {
+                display: inline-block;
+                padding: 12px 28px;
+                border-radius: 4px;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 14px;
+                transition: 0.3s;
+                border: none;
+                cursor: pointer;
+            }
+
+            .btn-primary {
+                background-color: #c95c00;
+                color: #fff;
+            }
+
+            .btn-primary:hover {
+                background-color: #c95c00;
+            }
+
+            .btn-outline {
+                border: 2px solid #ffffff;
+                color: #ffffff;
+                margin-left: 10px;
+            }
+
+            .btn-outline:hover {
+                background: #ffffff;
+                color: #0b1e36;
+            }
+
+            /* BARRA 4 ELEMENTOS */
+            .stats {
+                background: #0b1e36;
+                border-top: SS 1px solid rgba(255, 255, 255, 0.1);
+                padding: 40px 0;
+                color: #fff;
+            }
+
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                text-align: center;
+                gap: 20px;
+            }
+
+            .stat-item h3 {
+                font-size: 36px;
+                color:  #cbd5e1;
+                font-weight: 700;
+            }
+
+            .stat-item p {
+                font-size: 13px;
+                color: #cbd5e1;
+                margin-top: 5px;
+            }
+
+            /* SERVICIOS */
+            .services {
+                padding: 80px 0;
+                background: #f8fafc;
+            }
+
+            .section-header {
+                text-align: center;
+                max-width: 700px;
+                margin: 0 auto 50px auto;
+            }
+
+            .section-header h2 {
+                font-size: 30px;
+                color: #0b1e36;
+                margin-bottom: 10px;
+            }
+
+            .section-header p {
+                color: #64748b;
+                font-size: 15px;
+            }
+
+            .grid-3 {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 30px;
+            }
+
+            .service-card {
+                background: #fff;
+                padding: 40px 30px;
+                border-radius: 6px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+                border-top: 4px solid #0b1e36;
+                transition: transform 0.3s ease;
+            }
+
+            .service-card:hover {
+                transform: translateY(-5px);
+                border-top-color: #c95c00;
+            }
+
+            .service-card .icon {
+                font-size: 36px;
+                color: #0b1e36;
+                margin-bottom: 20px;
+            }
+
+            .service-card h3 {
+                font-size: 18px;
+                color: #0b1e36;
+                margin-bottom: 12px;
+            }
+
+            /* PARRAFO OPORTUNIDADES */
+
+            .service-card p {
+                font-size: 14px;
+                color: #64748b;
+                line-height: 1.6;
+            }
+
+            /* WHY US */
+            .why-us {
+                padding: 80px 0;
+            }
+
+            .grid-2 {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 40px;
+                align-items: center;
+            }
+            
+            /* Estilos para la barra horizontal */
+.banner-whatsapp-bar {
+    background-color: #0b1e36; /* Azul oscuro Adamantine */
+    padding: 10px 0;
+    width: 100%;
+}
+
+.banner-bar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.banner-bar-text {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Botón verde estilo WhatsApp */
+.btn-banner-bar {
+    background-color: #25d366; /* Verde Oficial de WhatsApp */
+    color: #ffffff;             /* Texto Blanco */
+    padding: 10px 28px;
+    border-radius: 50px;        /* Bordes estilo píldora/redondeados */
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Efecto al pasar el cursor (Hover) */
+.btn-banner-bar:hover {
+    background-color: #1eaa53; /* Verde un poco más oscuro al pasar el cursor */
+    color: #ffffff;
+    transform: translateY(-2px); /* Se eleva levemente */
+    box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4); /* Sombra con resplandor verde */
+}
+
+/* Ajuste para celulares */
+@media (max-width: 768px) {
+    .banner-bar-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .btn-banner-bar {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+            /* PORQUE INVERTIR EN NOSOTROS */
+            .why-text h2 {
+                font-size: 30px;
+                color: #0b1e36;
+                margin-bottom: 30px;
+            }
+
+            .benefit-item {
+                display: flex;
+                gap: 20px;
+                margin-bottom: 25px;
+                margin-top: 30px;
+            
+            }
+            
+            .why-text p {
+                color: #64748b;
+            }
+
+            /* ICONOS */
+            .benefit-item i {
+                font-size: 24px;
+                color: #c95c00;
+                margin-top: 3px;
+            }
+
+             /* 3 BENEFICIOS */
+            .benefit-item h4 {
+                font-size: 16px;
+                color: #0b1e36;
+                margin-bottom: 5px;
+            }
+
+            .benefit-item p {
+                font-size: 14px;
+                color: #64748b;
+            }
+
+            .why-image img {
+                width: 100%;
+                border-radius: 8px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            }
+
+            /* NETWORK */
+            .network {
+                background:
+                    linear-gradient(rgba(11, 30, 54, 0.9), rgba(11, 30, 54, 0.9)),
+                    url("https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1200&q=80")
+                        center/cover;
+                padding: 80px 0;
+                color: #fff;
+            }
+
+            .network h2 {
+                font-size: 32px;
+                margin-bottom: 15px;
+            }
+
+            .network p {
+                color: #cbd5e1;
+                max-width: 600px;
+                margin: 0 auto 30px auto;
+            }
+
+            .btn-large {
+                padding: 15px 35px;
+                font-size: 16px;
+            }
+
+            /* CONTACT */
+            .contact {
+                padding: 80px 0;
+                background: #f8fafc;
+            }
+
+            .contact-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 50px;
+                align-items: center;
+            }
+
+            .contact-info h2 {
+                font-size: 30px;
+                color: #0b1e36;
+                margin-bottom: 15px;
+            }
+
+            .contact-info p {
+                color: #64748b;
+                margin-bottom: 30px;
+            }
+
+            .info-list {
+                list-style: none;
+            }
+
+            .info-list li {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                margin-bottom: 15px;
+                color: #334155;
+                font-weight: 500;
+            }
+
+            .info-list i {
+                color: #c95c00;
+                font-size: 18px;
+            }
+
+            .contact-form {
+                background: #fff;
+                padding: 35px;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            }
+
+            .contact-form h3 {
+                margin-bottom: 20px;
+                color: #0b1e36;
+                font-size: 18px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            .form-group input,
+            .form-group select {
+                width: 100%;
+                padding: 12px 15px;
+                border: 1px solid #cbd5e1;
+                border-radius: 4px;
+                outline: none;
+                font-size: 14px;
+            }
+
+            .form-group input:focus,
+            .form-group select:focus {
+                border-color: #0b1e36;
+            }
+
+            .btn-block {
+                width: 100%;
+            }
+
+            /* WHATSAPP FLOTANTE */
+            .whatsapp-btn {
+                position: fixed;
+                bottom: 25px;
+                right: 25px;
+                background-color: #25d366;
+                color: white;
+                width: 55px;
+                height: 55px;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 28px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                z-index: 999;
+                text-decoration: none;
+                transition: 0.3s;
+            }
+
+            .whatsapp-btn:hover {
+                transform: scale(1.1);
+            }
+
+            /* FOOTER */
+            footer {
+                background: #061120;
+                color: #94a3b8;
+                padding: 30px 0;
+                font-size: 13px;
+                text-decoration: none;
+            
+            }
+
+            .footer-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+        
+            }
+
+            /* RESPONSIVE */
+            @media (max-width: 768px) {
+                .nav {
+                    display: none;
+                }
+                .hero-content h1 {
+                    font-size: 28px;
+                }
+                .hero-buttons {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+                .btn-outline {
+                    margin-left: 0;
+                }
+                .footer-content {
+                    flex-direction: column;
+                    gap: 10px;
+                    text-align: center;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Header / Navegación -->
+        <header class="header">
+            <div class="container nav-container">
+                <div class="logo">
+                 <img src="https://www.adamantine.com.mx/logo-adamantine-bco.png" 
+                      class="logo-a logo-top" 
+                      alt="logo blanco" 
+                      title="Logo Adamantine"
+                      width="299px"/>
+                </div>
+                <!-- BOTÓN HAMBURGUESA PARA CELULAR -->
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <nav class="nav" id="navMenu">
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#servicios">¿Qué Hacemos?</a></li>
+                <li><a href="#red">Sé Parte de Nuestra Red</a></li>
+                <li><a href="#contacto" class="btn-nav">Contacto</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+        <!-- Banner Principal -->
+        <section id="inicio" class="hero">
+            <div class="hero-overlay"></div>
+            <div class="container hero-content">
+                <span class="hero-tagline">LÍDERES EN ADMINISTRACIÓN Y VENTA DE ACTIVOS</span>
+                <h1>Soluciones Estratégicas en Remates Bancarios y Cartera Vencida</h1>
+                <p>
+                    Conectamos a inversionistas y brókers con oportunidades inmobiliarias de alta rentabilidad a nivel
+                    nacional en cesiones de derechos adjudicadas y litigiosas.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#contacto" class="btn btn-primary">Solicitar Inventario</a>
+                    <a href="#red" class="btn btn-outline">Red de Inversionistas / Brókers</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Métricas -->
+        <section class="stats">
+            <div class="container stats-grid">
+                <div class="stat-item">
+                    <h3>+25</h3>
+                    <p>Años de Experiencia</p>
+                </div>
+                <div class="stat-item">
+                    <h3>32</h3>
+                    <p>Estados con presencia</p>
+                </div>
+                <div class="stat-item">
+                    <h3>40%</h3>
+                    <p>Sobre el Valor comercial</p>
+                </div>
+                <div class="stat-item">
+                    <h3>100%</h3>
+                    <p>Información Jurídica Documentada</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Servicios -->
+        <section id="servicios" class="services">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Oportunidades de Inversión Inmobiliaria</h2>
+                    <p>
+                        Somos una administradora de carteras vencidas. Proponiendo inversiones en la adquisición
+                        y venta de remates bancarios en el sector inmobiliario.
+                    </p>
+                </div>
+                <div class="grid-3">
+                    <div class="service-card">
+                        <i class="fa-solid fa-gavel icon"></i>
+                        <h3>Cesiones Litigiosas</h3>
+                        <p>
+                            Adquisición de los derechos sobre el juicio hipotecario. Ideal para inversionistas que
+                            buscan el mayor margen de rendimiento a mediano plazo.
+                        </p>
+                    </div>
+                    <div class="service-card">
+                       <i class="fa-solid fa-tag icon"></i>
+                        <h3>Cesiones Adjudicadas</h3>
+                        <p>
+                            Adquiere los derechos sobre inmuebles con sentencia favorable a la institución y procesos jurídicos avanzados, diseñados para inversionistas y brokers que buscan activos con mayor avance legal.
+                        </p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fa-solid fa-file-signature icon"></i>
+                        <h3>Activos con Potencial de Inversión</h3>
+                        <p>
+                            Solicita nuestro portafolio inmobiliario de origen bancario y conoce las características
+                            de cada oportunidad.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Barra Azul CTA WhatsApp -->
+                    <section class="banner-whatsapp-bar">
+                        <div class="container banner-bar-content">
+                            <p class="banner-bar-text">
+                               ¿Te interesa conocer nuestras oportunidades de inversión?
+                            </p>
+                            <a href="https://wa.me/525619949449?text=Hola,%20me%20interesa%20conocer%20las%20oportunidades%20de%20inversión%20en%20remates%20bancarios%20disponibles."
+                               class="btn-banner-bar" 
+                               target="_blank">
+                                <i class="fa-brands fa-whatsapp"></i> Escríbenos por WhatsApp
+                            </a>
+                        </div>
+</section>
+        <!-- Ventajas -->
+        <section class="why-us">
+            <div class="container grid-2">
+                <div class="why-text">
+                    <h2>¿Por qué invertir en Remates Bancarios con nosotros?</h2>
+                     <p>
+                            Contamos con acompañamiento legal hasta la formalización de la cesión ante el notario que tú elijas.
+                        </p>
+                    
+                    <div class="benefit-item">
+                        <i class="fa-solid fa-pen-nib"></i>
+                        <div>
+                            <h4>Seguridad Jurídica Integral</h4>
+                            <p>
+                               Cada propiedad pasa por una auditoría legal exhaustiva antes de ser ofrecida a nuestros clientes e inversionistas.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <div>
+                            <h4>Información del activo</h4>
+                            <p>
+                               Conoce las características jurídicas y comerciales de cada activo.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fa-solid fa-user-tie"></i>
+                        <div>
+                            <h4>Experiencia y conocimiento especializado</h4>
+                            <p>Con más de 25 años de experiencia en la administración y comercialización de remates bancarios, te brindamos asesoría personalizada
+                            en cada oportunidad.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="why-image">
+                    <img
+                        src="IMG/selloadamantine.png"
+                        alt="Adamantine"/>
+                </div>
+            </div>
+        </section>
+
+        <!-- Red -->
+        <section id="red" class="network">
+            <div class="container text-center">
+                <h2>Sé parte de nuestra red de Brókers e Inversionistas</h2>
+                <p>
+                    Accede a herramientas exclusivas, precios por debajo del valor comercial e inventario actualizado a
+                    nivel nacional.
+                </p>
+                <a href="#contacto" class="btn btn-primary btn-large">Unirme a la Red</a>
+            </div>
+        </section>
+
+        <!-- Contacto -->
+        <section id="contacto" class="contact">
+            <div class="container contact-grid">
+                <div class="contact-info">
+                    <h2>Contáctanos</h2>
+                    <p>
+                        Déjanos tus datos para brindarte atención especializada o compartirte nuestro catálogo nacional
+                        de carteras disponibles.
+                    </p>
+                    <ul class="info-list">
+                        <li>
+                            <i class="fa-solid fa-location-dot"></i> Av. Insurgentes Sur 800-Piso 22, Col. del Valle, Benito Juárez, CP 03100, CDMX.</li>
+                        <li><i class="fa-solid fa-envelope"></i> contacto@adamantine.com.mx</li>
+                        <li><i class="fa-solid fa-phone"></i> 56 1994 9449</li>
+                    </ul>
+                </div>
+
+                <form class="contact-form">
+                    <h3>Solicitar Información de Inventario</h3>
+                    <div class="form-group">
+                        <input type="text" placeholder="Nombre completo" required />
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Correo electrónico" required />
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" placeholder="Teléfono / WhatsApp" required />
+                    </div>
+                    <div class="form-group">
+                        <select required>
+                            <option value="" disabled selected>Tu perfil</option>
+                            <option value="inversionista">Inversionista</option>
+                            <option value="broker">Bróker/Asesor Inmobiliario</option>
+                            <option value="broker">Empresa Particular</option>
+                            <option value="institucional">Otro</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Enviar Solicitud</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- WhatsApp Flotante -->
+        <a href="https://wa.me/525619949449" class="whatsapp-btn" target="_blank" aria-label="Contacto WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+
+        <!-- Footer -->
+        <footer>  
+    <div class="container footer-content" style="justify-content: center;">
+        <p style="color: #ffffff; margin: 0; font-size: 14px;">
+            Copyright © 2026 Adamantine. Todos los derechos reservados. | 
+            <a href="https://www.adamantine.com.mx/terminos-y-condiciones.html" style="color: #38bdf8; text-decoration: none;">Términos y condiciones</a>
+        </p>
+    </div>
+        </footer>
+        <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    // Abre / cierra el menú al hacer clic en la hamburguesa
+    menuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        
+        // Cambia el ícono entre barras (☰) y equis (✕)
+        const icon = menuToggle.querySelector('i');
+        if (navMenu.classList.contains('active')) {
+            icon.className = 'fa-solid fa-xmark';
+        } else {
+            icon.className = 'fa-solid fa-bars';
+        }
+    });
+
+    // Cierra el menú automáticamente al hacer clic en cualquier opción
+    document.querySelectorAll('.nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            navMenu.classList.remove('active');
+            menuToggle.querySelector('i').className = 'fa-solid fa-bars';
+        });
+    });
+</script>
+    </body>
+</html>
